@@ -5,10 +5,33 @@ const GeminiService = require('./geminiService');
 
 class WhatsAppService {
     constructor() {
+        // Configurações otimizadas para Linux/Debian
+        const puppeteerArgs = process.env.PUPPETEER_ARGS 
+            ? process.env.PUPPETEER_ARGS.split(',')
+            : [
+                '--no-sandbox',
+                '--disable-setuid-sandbox',
+                '--disable-dev-shm-usage',
+                '--disable-gpu',
+                '--no-first-run',
+                '--no-zygote',
+                '--single-process',
+                '--disable-extensions',
+                '--disable-background-timer-throttling',
+                '--disable-backgrounding-occluded-windows',
+                '--disable-renderer-backgrounding',
+                '--disable-features=TranslateUI',
+                '--disable-ipc-flooding-protection'
+            ];
+
         this.client = new Client({
             authStrategy: new LocalAuth(),
             puppeteer: {
-                args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
+                headless: true,
+                args: puppeteerArgs,
+                executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined,
+                timeout: 60000,
+                protocolTimeout: 60000
             }
         });
         
