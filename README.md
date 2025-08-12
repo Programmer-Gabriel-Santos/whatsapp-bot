@@ -11,15 +11,18 @@ Bot de WhatsApp que escuta mensagens, salva no banco SQLite local e responde usa
 - ✅ Resposta automática para mensagens
 - ✅ Tratamento de erros robusto
 - ✅ Otimizado para baixo consumo de memória
+- ✅ Compatível com sistemas Linux/Debian
 
 ## 📋 Pré-requisitos
 
 - Node.js 16+ 
 - NPM ou Yarn
 - Chave da API do Google Gemini
+- **Linux/Debian**: Chrome, Chromium ou navegador compatível
 
 ## 🛠️ Instalação
 
+### Windows/macOS
 1. **Clone o repositório:**
 ```bash
 git clone <seu-repositorio>
@@ -36,9 +39,48 @@ npm install
 cp .env.example .env
 ```
 
-4. **Edite o arquivo `.env` e adicione sua chave da API Gemini:**
+### Linux/Debian (Recomendado)
+1. **Clone o repositório:**
+```bash
+git clone <seu-repositorio>
+cd whatsapp-bot
+```
+
+2. **Execute o script de instalação automática:**
+```bash
+# Opção 1: Google Chrome (mais estável)
+chmod +x install-debian.sh
+./install-debian.sh
+
+# Opção 2: Chromium (mais leve, nativo do Debian)
+chmod +x install-debian-chromium.sh
+./install-debian-chromium.sh
+```
+
+3. **Configure as variáveis de ambiente:**
+```bash
+cp .env.linux.example .env
+```
+
+4. **Instale as dependências Node.js:**
+```bash
+npm install
+```
+
+## 🔧 Configuração das variáveis de ambiente
+
+### Arquivo .env básico:
 ```env
 GEMINI_API_KEY=sua_chave_api_aqui
+DB_PATH=./database/messages.db
+```
+
+### Arquivo .env para Linux (otimizado):
+```env
+GEMINI_API_KEY=sua_chave_api_aqui
+DB_PATH=./database/messages.db
+PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome
+PUPPETEER_ARGS=--no-sandbox,--disable-setuid-sandbox,--disable-dev-shm-usage
 ```
 
 ## 🚀 Como usar
@@ -87,6 +129,38 @@ src/
 └── index.js              # Arquivo principal
 ```
 
+## 🐧 Solução de problemas para Linux
+
+### Erro "failed to launch the browser process"
+Este erro é comum em sistemas Linux. Use um dos scripts de instalação fornecidos:
+
+```bash
+# Para Debian/Ubuntu
+./install-debian-chromium.sh
+```
+
+### Verificar se o navegador está funcionando:
+```bash
+# Testar Google Chrome
+google-chrome --version
+
+# Testar Chromium
+chromium --version
+
+# Verificar caminhos
+which google-chrome
+which chromium
+```
+
+### Configurações alternativas no .env:
+```env
+# Para Chromium
+PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+
+# Para Google Chrome
+PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome
+```
+
 ## 📊 Monitoramento
 
 O bot exibe logs detalhados no console:
@@ -104,6 +178,7 @@ Pressione `Ctrl+C` no terminal para parar o bot graciosamente.
 - Requer conexão com internet
 - Depende da API do Google Gemini
 - WhatsApp Web pode desconectar ocasionalmente
+- **Linux**: Requer navegador compatível (Chrome/Chromium)
 
 ## 🤝 Contribuição
 
