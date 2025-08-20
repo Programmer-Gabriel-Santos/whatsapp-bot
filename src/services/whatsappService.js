@@ -1,12 +1,12 @@
 const { Client, LocalAuth } = require('whatsapp-web.js');
-const qrcode = require('qrcode-terminal');
+const QRCode = require('qrcode');
 const Database = require('../config/database');
 const GeminiService = require('./geminiService');
 
 class WhatsAppService {
     constructor() {
         // Configurações otimizadas para Linux/Debian
-        const puppeteerArgs = process.env.PUPPETEER_ARGS 
+        const puppeteerArgs = process.env.PUPPETEER_ARGS
             ? process.env.PUPPETEER_ARGS.split(',')
             : [
                 '--no-sandbox',
@@ -34,22 +34,29 @@ class WhatsAppService {
                 protocolTimeout: 60000
             }
         });
-        
+
         this.database = new Database();
         this.geminiService = new GeminiService();
         this.messageFilters = new Set(['text', 'chat']); // Filtros padrão
-        
+        this.qrCodeData = null;
+
         this.setupEventHandlers();
     }
 
     setupEventHandlers() {
-        this.client.on('qr', (qr) => {
+        this.client.on('qr', async (qr) => {
             console.log('QR Code recebido, escaneie no WhatsApp:');
-            qrcode.generate(qr, { small: true });
+            try {
+                this.qrCodeData = await QRCode.toDataURL(qr, { width: 500 });
+                console.log('QR Code gerado com sucesso');
+            } catch (error) {
+                console.error('Erro ao gerar QR Code:', error);
+            }
         });
 
         this.client.on('ready', () => {
             console.log('Cliente WhatsApp está pronto!');
+            this.qrCodeData = null; // Limpar QR code quando conectado
         });
 
         this.client.on('message', async (message) => {
@@ -58,7 +65,12 @@ class WhatsAppService {
 
         this.client.on('disconnected', (reason) => {
             console.log('Cliente desconectado:', reason);
+            this.qrCodeData = null; // Limpar QR code quando desconectado
         });
+    }
+
+    getQrCodeData() {
+        return this.qrCodeData;
     }
 
     async handleMessage(message) {
@@ -102,10 +114,10 @@ class WhatsAppService {
 
     shouldProcessMessage(message) {
         // Verificar se é uma mensagem de texto e não é do próprio bot
-        return this.messageFilters.has(message.type) && 
-               !message.fromMe && 
-               message.body && 
-               message.body.trim().length > 0;
+        return this.messageFilters.has(message.type) &&
+            !message.fromMe &&
+            message.body &&
+            message.body.trim().length > 0;
     }
 
     setMessageFilters(filters) {

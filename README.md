@@ -1,184 +1,186 @@
 # WhatsApp Bot com IA Gemini
 
-Bot de WhatsApp que escuta mensagens, salva no banco SQLite local e responde usando a IA Gemini do Google.
+Bot de WhatsApp inteligente que utiliza a API do Google Gemini para responder mensagens automaticamente, com interface web para visualização do QR Code.
 
 ## 🚀 Funcionalidades
 
-- ✅ Conexão com WhatsApp via whatsapp-web.js
-- ✅ Filtros de mensagem configuráveis
-- ✅ Armazenamento local em SQLite
-- ✅ Integração com Google Gemini AI
-- ✅ Resposta automática para mensagens
-- ✅ Tratamento de erros robusto
-- ✅ Otimizado para baixo consumo de memória
-- ✅ Compatível com sistemas Linux/Debian
+- 🤖 **Bot Inteligente**: Integração com Google Gemini AI para respostas automáticas
+- 📱 **WhatsApp Web**: Conecta via WhatsApp Web.js
+- 💾 **Banco de Dados**: Armazena mensagens e respostas no SQLite
+- 🌐 **Interface Web**: Página web para visualizar QR Code e status
+- 🔄 **API REST**: Endpoints para monitoramento e controle
+- 📊 **Logs Detalhados**: Sistema de logging completo
 
 ## 📋 Pré-requisitos
 
 - Node.js 16+ 
-- NPM ou Yarn
-- Chave da API do Google Gemini
-- **Linux/Debian**: Chrome, Chromium ou navegador compatível
+- Chromium ou Google Chrome
+- Conta do WhatsApp
+- Chave da API Google Gemini
 
 ## 🛠️ Instalação
 
-### Windows/macOS
-1. **Clone o repositório:**
+### 1. Clone o repositório
 ```bash
-git clone <seu-repositorio>
+git clone <url-do-repositorio>
 cd whatsapp-bot
 ```
 
-2. **Instale as dependências:**
+### 2. Instale as dependências
 ```bash
+yarn install
+# ou
 npm install
 ```
 
-3. **Configure as variáveis de ambiente:**
-```bash
-cp .env.example .env
-```
-
-### Linux/Debian (Recomendado)
-1. **Clone o repositório:**
-```bash
-git clone <seu-repositorio>
-cd whatsapp-bot
-```
-
-2. **Execute o script de instalação automática:**
-```bash
-# Opção 1: Google Chrome (mais estável)
-chmod +x install-debian.sh
-./install-debian.sh
-
-# Opção 2: Chromium (mais leve, nativo do Debian)
-chmod +x install-debian-chromium.sh
-./install-debian-chromium.sh
-```
-
-3. **Configure as variáveis de ambiente:**
+### 3. Configure o arquivo .env
 ```bash
 cp .env.linux.example .env
 ```
 
-4. **Instale as dependências Node.js:**
-```bash
-npm install
-```
-
-## 🔧 Configuração das variáveis de ambiente
-
-### Arquivo .env básico:
+Edite o arquivo `.env` com suas configurações:
 ```env
+# Chave da API do Google Gemini
 GEMINI_API_KEY=sua_chave_api_aqui
+
+# Configurações do banco SQLite
 DB_PATH=./database/messages.db
+
+# Configurações do bot
+BOT_NAME=WhatsApp Bot
+LOG_LEVEL=info
+
+# Configurações do Puppeteer para Linux
+PUPPETEER_EXECUTABLE_PATH=/usr/lib64/chromium-browser/chromium-browser
+PUPPETEER_ARGS=--no-sandbox,--disable-setuid-sandbox,--disable-dev-shm-usage,--disable-gpu,--no-first-run,--no-zygote,--single-process
 ```
 
-### Arquivo .env para Linux (otimizado):
-```env
-GEMINI_API_KEY=sua_chave_api_aqui
-DB_PATH=./database/messages.db
-PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome
-PUPPETEER_ARGS=--no-sandbox,--disable-setuid-sandbox,--disable-dev-shm-usage
-```
-
-## 🚀 Como usar
-
-### Iniciar o bot:
+### 4. Instale o Chromium (Linux)
 ```bash
-npm start
-```
+# Fedora/RHEL
+sudo dnf install chromium
 
-### Modo desenvolvimento (com auto-reload):
-```bash
-npm run dev
-```
+# Ubuntu/Debian
+sudo apt install chromium-browser
 
-## 📱 Primeira execução
-
-1. Execute `npm start`
-2. Um QR Code aparecerá no terminal
-3. Escaneie o QR Code com seu WhatsApp
-4. O bot estará ativo e responderá automaticamente
-
-## ⚙️ Configuração
-
-### Filtros de mensagem
-Por padrão, o bot processa apenas mensagens de texto. Para modificar os filtros, edite o arquivo `src/services/whatsappService.js`.
-
-### Banco de dados
-O banco SQLite é criado automaticamente na pasta `database/`. As mensagens são salvas com:
-- Número do remetente
-- Nome do remetente
-- Texto da mensagem
-- Tipo da mensagem
-- Timestamp
-- Resposta do Gemini
-- Status de envio
-
-## 🔧 Estrutura do projeto
-
-```
-src/
-├── config/
-│   └── database.js      # Configuração do SQLite
-├── services/
-│   ├── whatsappService.js # Serviço principal do WhatsApp
-│   └── geminiService.js   # Integração com Gemini
-└── index.js              # Arquivo principal
-```
-
-## 🐧 Solução de problemas para Linux
-
-### Erro "failed to launch the browser process"
-Este erro é comum em sistemas Linux. Use um dos scripts de instalação fornecidos:
-
-```bash
-# Para Debian/Ubuntu
+# Ou use o script automático
+chmod +x install-debian-chromium.sh
 ./install-debian-chromium.sh
 ```
 
-### Verificar se o navegador está funcionando:
+## 🚀 Uso
+
+### Iniciar o bot
 ```bash
-# Testar Google Chrome
-google-chrome --version
-
-# Testar Chromium
-chromium --version
-
-# Verificar caminhos
-which google-chrome
-which chromium
+yarn start
+# ou
+npm start
 ```
 
-### Configurações alternativas no .env:
-```env
-# Para Chromium
-PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
-
-# Para Google Chrome
-PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome
+### Modo desenvolvimento
+```bash
+yarn dev
+# ou
+npm run dev
 ```
 
-## 📊 Monitoramento
+## 🌐 Interface Web
 
-O bot exibe logs detalhados no console:
-- Status de conexão
+Após iniciar o bot, acesse:
+
+- **Interface Web**: http://localhost:3000/web
+- **API Status**: http://localhost:3000/status
+- **QR Code**: http://localhost:3000/qr
+- **Health Check**: http://localhost:3000/health
+
+## 📱 Como conectar
+
+1. Inicie o bot com `yarn start`
+2. Acesse http://localhost:3000/web
+3. Abra o WhatsApp no seu celular
+4. Toque em **Menu** → **WhatsApp Web**
+5. Aponte a câmera para o QR Code
+6. Aguarde a confirmação de conexão
+
+## 🔌 API Endpoints
+
+### GET /
+Informações sobre a API e endpoints disponíveis.
+
+### GET /web
+Interface web para visualizar o QR Code e status da conexão.
+
+### GET /qr
+Retorna o QR Code atual em formato base64 (JSON).
+
+### GET /status
+Status da conexão com o WhatsApp.
+
+### GET /health
+Health check da aplicação.
+
+## 🗄️ Banco de Dados
+
+O bot utiliza SQLite para armazenar:
 - Mensagens recebidas
-- Respostas enviadas
+- Respostas geradas pelo Gemini
+- Metadados das conversas
+
+## 🔧 Configurações Avançadas
+
+### Variáveis de Ambiente
+
+| Variável | Descrição | Padrão |
+|----------|-----------|---------|
+| `GEMINI_API_KEY` | Chave da API Google Gemini | - |
+| `DB_PATH` | Caminho do banco SQLite | `./database/messages.db` |
+| `BOT_NAME` | Nome do bot | `WhatsApp Bot` |
+| `LOG_LEVEL` | Nível de log | `info` |
+| `PORT` | Porta do servidor Express | `3000` |
+| `PUPPETEER_EXECUTABLE_PATH` | Caminho do Chromium | `/usr/lib64/chromium-browser/chromium-browser` |
+| `PUPPETEER_ARGS` | Argumentos do Puppeteer | Argumentos otimizados para Linux |
+
+### Filtros de Mensagem
+
+O bot processa apenas mensagens de texto por padrão. Para personalizar:
+
+```javascript
+// No código
+this.whatsappService.setMessageFilters(['text', 'image', 'document']);
+```
+
+## 🐛 Solução de Problemas
+
+### Erro: "Could not find expected browser (chrome)"
+
+**Solução**: Configure o caminho correto do Chromium no `.env`:
+```env
+PUPPETEER_EXECUTABLE_PATH=/usr/lib64/chromium-browser/chromium-browser
+```
+
+### Erro de permissões no Linux
+
+**Solução**: Execute o script de instalação:
+```bash
+chmod +x install-debian-chromium.sh
+./install-debian-chromium.sh
+```
+
+### Bot não responde
+
+**Verifique**:
+1. Status da conexão em `/status`
+2. Logs do console
+3. Configuração da API Gemini
+4. Banco de dados SQLite
+
+## 📝 Logs
+
+O bot gera logs detalhados incluindo:
+- Status da conexão WhatsApp
+- Mensagens recebidas/enviadas
 - Erros e exceções
-
-## 🛑 Parando o bot
-
-Pressione `Ctrl+C` no terminal para parar o bot graciosamente.
-
-## ⚠️ Limitações
-
-- Requer conexão com internet
-- Depende da API do Google Gemini
-- WhatsApp Web pode desconectar ocasionalmente
-- **Linux**: Requer navegador compatível (Chrome/Chromium)
+- Status do banco de dados
 
 ## 🤝 Contribuição
 
@@ -190,4 +192,25 @@ Pressione `Ctrl+C` no terminal para parar o bot graciosamente.
 
 ## 📄 Licença
 
-MIT License - veja o arquivo LICENSE para detalhes. 
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+
+## 🆘 Suporte
+
+Se encontrar problemas:
+1. Verifique os logs do console
+2. Consulte a seção de solução de problemas
+3. Abra uma issue no GitHub
+4. Verifique se o Chromium está instalado corretamente
+
+## 🔄 Atualizações
+
+Para atualizar o bot:
+```bash
+git pull origin main
+yarn install
+yarn start
+```
+
+---
+
+**⚠️ Aviso**: Este bot é para uso educacional. Respeite os termos de uso do WhatsApp e da API Gemini. 

@@ -7,15 +7,22 @@
     "start": "node src/index.js",
     "dev": "nodemon src/index.js"
   },
-  "keywords": ["whatsapp", "bot", "gemini", "sqlite"],
+  "keywords": [
+    "whatsapp",
+    "bot",
+    "gemini",
+    "sqlite"
+  ],
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "whatsapp-web.js": "^1.23.0",
+    "@google/generative-ai": "^0.2.1",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "qrcode": "^1.5.4",
     "qrcode-terminal": "^0.12.0",
     "sqlite3": "^5.1.6",
-    "@google/generative-ai": "^0.2.1",
-    "dotenv": "^16.3.1"
+    "whatsapp-web.js": "^1.23.0"
   },
   "devDependencies": {
     "nodemon": "^3.0.2"
@@ -23,4 +30,4 @@
   "engines": {
     "node": ">=16.0.0"
   }
-} 
+}
