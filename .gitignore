@@ -6,10 +6,10 @@ yarn-error.log*
 
 # Arquivos de ambiente
 
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+# .env.local
+# .env.development.local
+# .env.test.local
+# .env.production.local
 
 # Banco de dados
 database/
